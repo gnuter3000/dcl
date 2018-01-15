@@ -1,0 +1,35 @@
+version: '2'
+services:
+  nginx:
+    build: nginx
+    ports:
+     - "80:80"
+    volumes:
+     - ./application:/usr/share/nginx/html
+    networks:
+     - dcl-dev
+  php:
+    build: php
+    volumes:
+     - ./application:/usr/share/nginx/html
+    networks:
+     - dcl-dev
+  mysql:
+    image: mysql:5.7
+    ports:
+     - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpass
+    volumes:
+     - mysqldata:/var/lib/mysql
+    networks:
+     - dcl-dev
+networks:
+  dcl-dev:
+    driver: "bridge"
+volumes:
+  mysqldata:
+    driver: "local"
